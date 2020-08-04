@@ -140,6 +140,12 @@ class ImgProcessActivity : AppCompatActivity() {
                 null
             }
         }
+        else {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
     }
 
     private fun rotate(bitmap: Bitmap, degree: Int) : Bitmap {
