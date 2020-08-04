@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">test3</string>
+    <string name="image_description">The fragment to show image from album or camera</string>
+    <string name="gallery">gallery</string>
+    <string name="camera">camera</string>
+    <string name="save">save</string>
+    <string name="reset">reset</string>
+    <string name="title_activity_image_processing">ImageProcessing</string>
+    <string name="process_name">Crop and Rotation</string>
+    <string name="clock_wise">90</string>
+    <string name="counter_clock_wise">-90</string>
+    <string name="ok">ok</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+</resources>
