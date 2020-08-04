@@ -2,13 +2,9 @@ package com.example.test3
 
 import android.app.Activity
 import android.content.Intent
-import android.database.Cursor
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.graphics.Matrix
-import android.graphics.Picture
-import android.media.ExifInterface
-import android.media.Image
 import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity //base
@@ -17,9 +13,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_main.*
@@ -29,7 +23,6 @@ import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.truncate
 
 const val REQUEST_IMAGE_CAPTURE = 1
 const val REQUEST_IMAGE_GALLERY = 2
@@ -45,7 +38,7 @@ class MainActivity : AppCompatActivity() {
 
         setPermission() // check initial permission
 
-        buttonGallery.setOnClickListener {
+        buttonMain.setOnClickListener {
             //getFromGallery()
             goNextIntent(REQUEST_IMAGE_GALLERY)
         }
@@ -54,13 +47,7 @@ class MainActivity : AppCompatActivity() {
             //takeCapture()
             goNextIntent(REQUEST_IMAGE_CAPTURE)
         }
-        buttonSave.setOnClickListener {
-            curBitmap?.let { savePhoto(it) }
-        }
-        buttonReset.setOnClickListener {
-            imageView.setImageResource(R.drawable.test_image)
-            curBitmap = null
-        }
+
 
     }
 
@@ -142,7 +129,7 @@ class MainActivity : AppCompatActivity() {
                 var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
 
                 Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-                imageView.setImageBitmap(bitmap)
+                ivResult.setImageBitmap(bitmap)
                 curBitmap = bitmap
 
 
@@ -155,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                 )
                 var bitmap = ImageDecoder.decodeBitmap(decode)
                 Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-                imageView.setImageBitmap(bitmap)
+                ivResult.setImageBitmap(bitmap)
                 curBitmap = bitmap
 
             }
@@ -172,7 +159,7 @@ class MainActivity : AppCompatActivity() {
                 //imageView.setImageBitmap(bitmap)
 
                 //val new_bitmap = rotate(bitmap, 90)
-                imageView.setImageBitmap(bitmap)
+                ivResult.setImageBitmap(bitmap)
                 curBitmap = bitmap
 
 

@@ -12,10 +12,12 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_img_process.*
 import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
+import java.io.FileOutputStream
 import java.io.IOException
 import java.lang.Exception
 import java.text.SimpleDateFormat
@@ -38,6 +40,7 @@ class ImgProcessActivity : AppCompatActivity() {
                 REQUEST_IMAGE_CAPTURE -> takeCapture()
                 REQUEST_IMAGE_GALLERY -> getFromGallery()
             }
+
         }
         buttonCw.setOnClickListener {
             curBitmap = rotate(curBitmap!!, 90)
@@ -49,9 +52,24 @@ class ImgProcessActivity : AppCompatActivity() {
             ivProcess.setImageBitmap(curBitmap)
         }
 
-
+        buttonOk.setOnClickListener {
+            val tempFileName = saveTempFile(curBitmap!!)
+            val intent = Intent(this, ImageActivity::class.java)
+            intent.putExtra("tempFile", tempFileName)
+            startActivity(intent)
+            finish()
+        }
     }
 
+    private fun saveTempFile(bitmap: Bitmap): String {
+        val tempFileName : String = "temp_image_file"
+        val storageDir : File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val result = File.createTempFile("JPEG_${tempFileName}_", ".jpg", storageDir).absolutePath
+        val out = FileOutputStream(result)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        return result
+
+    }
 
     private fun getFromGallery() {
         val galIntent = Intent(Intent.ACTION_GET_CONTENT)
