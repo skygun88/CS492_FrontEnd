@@ -1,5 +1,8 @@
 package com.example.test3
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
@@ -9,21 +12,47 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.TextView
 import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_image.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
 import java.util.*
+/* --- Django test --- */
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
+/* ------------------- */
+
 
 class ImageActivity : AppCompatActivity() {
+    /* --- Django test --- */
+    internal lateinit var retrofit: Retrofit
+    internal lateinit var apiService: ApiService
+    internal lateinit var comment: Call<ResponseBody>
+    internal lateinit var result:String
+    /* ------------------- */
+
     var curBitmap: Bitmap? = null
+    var curFile: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
 
         if (intent.hasExtra("tempFile")){
             val tempFilePath = intent.getStringExtra("tempFile")
+            curFile = tempFilePath
 
             val file = File(tempFilePath)
 
@@ -33,7 +62,6 @@ class ImageActivity : AppCompatActivity() {
                 Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
                 ivResult.setImageBitmap(bitmap)
                 curBitmap = bitmap
-
 
             } else {
                 val decode = ImageDecoder.createSource(
@@ -47,7 +75,29 @@ class ImageActivity : AppCompatActivity() {
 
             }
         }
-
+        /* ----- Django Test ----- */
+        /*
+        retrofit = Retrofit.Builder().baseUrl(ApiService.API_URL).build()
+        apiService = retrofit.create(ApiService::class.java)
+        comment = apiService.get_Test("json")
+        comment.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                try {
+                    Log.d("DD_Test", response.body()!!.string())
+                    result = response.body()!!.string()
+                    Log.d("DD_Test2", result+"hi")
+                    tvDj.text = result
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                result = "error!!"
+                Log.e("D_Test", "페일!")
+            }
+        })
+        */
+        /* ---------------------- */
 
         buttonSave.setOnClickListener {
             curBitmap?.let { savePhoto(it) }
@@ -55,6 +105,16 @@ class ImageActivity : AppCompatActivity() {
         buttonReset.setOnClickListener {
             ivResult.setImageResource(R.drawable.test_image)
             curBitmap = null
+        }
+
+        buttonMain.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        buttonHttp.setOnClickListener {
+            testRetrofit()
         }
     }
 
@@ -72,4 +132,53 @@ class ImageActivity : AppCompatActivity() {
         Toast.makeText(this, "Saved the photo on gallery", Toast.LENGTH_SHORT).show()
     }
 
+    private fun testRetrofit(){
+
+        //creating a file
+        val file = File(curFile!!)
+        val fileName = "tempFile.png"
+
+
+        var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),file)
+        var body : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)
+
+        //The gson builder
+        var gson : Gson =  GsonBuilder()
+            .setLenient()
+            .create()
+
+
+        //creating retrofit object
+        var retrofit = Retrofit.Builder()
+            .baseUrl("http://6295a59ab51d.ngrok.io") // need to change
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .build()
+
+        //creating our api
+
+        var server = retrofit.create(retrofitInterface::class.java)
+        Log.d("Bodytest", body.toString())
+        // 파일, 사용자 아이디, 파일이름
+        server.post_Porfile_Request("img", body).enqueue(object: Callback<UserData> {
+            override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
+                if (response.isSuccessful) {
+                    //Log.d("레트로핏 결과2",""+ ''response.body().toString())
+                    Log.d("레트로핏 결과2",""+ "hi")
+                    val fileContents = response.body()!!.img
+                    val newBitmap = bitmapConverter.StringToBitmap(fileContents)
+                    ivResult.setImageBitmap(newBitmap)
+
+
+                } else {
+                    Log.d("레트로핏 결과3",""+ response.body().toString())
+                }
+            }
+            override fun onFailure(call: Call<UserData>, t: Throwable) {
+                Log.d("레트로핏 결과1",t.message)
+            }
+        })
+    }
+
 }
+
+

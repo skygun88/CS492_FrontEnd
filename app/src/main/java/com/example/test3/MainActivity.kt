@@ -17,6 +17,9 @@ import androidx.core.content.FileProvider
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Retrofit
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -24,12 +27,11 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+
 const val REQUEST_IMAGE_CAPTURE = 1
 const val REQUEST_IMAGE_GALLERY = 2
 
 class MainActivity : AppCompatActivity() {
-
-
     lateinit var curPhotoPath : String
     var curBitmap: Bitmap? = null
     override fun onCreate(savedInstanceState: Bundle?) {
