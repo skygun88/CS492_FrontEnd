@@ -113,33 +113,28 @@ class ImgProcessActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-
-        Log.d("helpme", "helpmeplz")
         /* 1. Get image by camera */
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val file = File(curPhotoPath)
 
             if (Build.VERSION.SDK_INT < 28) {
                 var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
-
-                Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-                ivProcess.setImageBitmap(bitmap)
-                curBitmap = bitmap
-
-
-            } else {
+                val newBitmap = resizeBitmap(bitmap)
+                ivProcess.setImageBitmap(newBitmap)
+                curBitmap = newBitmap
+                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
+            }
+            else {
                 val decode = ImageDecoder.createSource(
                     this.contentResolver,
                     Uri.fromFile(file)
                 )
                 var bitmap = ImageDecoder.decodeBitmap(decode)
-                Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-                ivProcess.setImageBitmap(bitmap)
-                curBitmap = bitmap
-
+                val newBitmap = resizeBitmap(bitmap)
+                ivProcess.setImageBitmap(newBitmap)
+                curBitmap = newBitmap
+                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
             }
-
-
         }
 
         /* 2. Get image from gallery */
@@ -150,10 +145,10 @@ class ImgProcessActivity : AppCompatActivity() {
                 //imageView.setImageBitmap(bitmap)
 
                 //val new_bitmap = rotate(bitmap, 90)
-                ivProcess.setImageBitmap(bitmap)
-                curBitmap = bitmap
-
-
+                val newBitmap = resizeBitmap(bitmap)
+                ivProcess.setImageBitmap(newBitmap)
+                curBitmap = newBitmap
+                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
             } catch (e: Exception) {
                 null
             }
@@ -163,7 +158,6 @@ class ImgProcessActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
     }
 
     private fun rotate(bitmap: Bitmap, degree: Int) : Bitmap {
@@ -171,9 +165,23 @@ class ImgProcessActivity : AppCompatActivity() {
         val height = bitmap.height
         val mtx = Matrix()
         mtx.setRotate(degree.toFloat())
-
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, mtx, true)
+    }
 
+    private fun resizeBitmap(bitmap: Bitmap): Bitmap {
+        val curWidth = bitmap.width
+        val curHeight = bitmap.height
+        val maxSize = 1000
+        var newWidth = maxSize
+        var newheight = maxSize
+        if (curWidth > maxSize || curHeight > maxSize){
+            when (curWidth > curHeight){
+                true -> newheight = curHeight * maxSize / curWidth
+                false -> newWidth = curWidth * maxSize / curHeight
+            }
+            return Bitmap.createScaledBitmap(bitmap, newWidth, newheight, true)
+        }
+        return bitmap
     }
 }
 

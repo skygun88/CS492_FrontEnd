@@ -17,10 +17,7 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_image.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
+import okhttp3.*
 import retrofit2.Call
 import java.io.File
 import java.io.FileOutputStream
@@ -31,6 +28,7 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 
 /* ------------------- */
 
@@ -38,7 +36,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 class ImageActivity : AppCompatActivity() {
     /* --- Django test --- */
     internal lateinit var retrofit: Retrofit
-    internal lateinit var apiService: ApiService
     internal lateinit var comment: Call<ResponseBody>
     internal lateinit var result:String
     /* ------------------- */
@@ -118,6 +115,16 @@ class ImageActivity : AppCompatActivity() {
         }
     }
 
+    private fun saveTempFile(bitmap: Bitmap): String {
+        val tempFileName : String = "temp_image_file"
+        val storageDir : File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val result = File.createTempFile("JPEG_${tempFileName}_", ".jpg", storageDir).absolutePath
+        val out = FileOutputStream(result)
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
+        return result
+
+    }
+
     private fun savePhoto(bitmap: Bitmap) {
         val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/"
         val timestamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
@@ -147,11 +154,18 @@ class ImageActivity : AppCompatActivity() {
             .setLenient()
             .create()
 
+        var okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(60, TimeUnit.SECONDS)
+            .writeTimeout(60, TimeUnit.SECONDS)
+            .build()
 
         //creating retrofit object
         var retrofit = Retrofit.Builder()
-            .baseUrl("http://6295a59ab51d.ngrok.io") // need to change
+            //.baseUrl("http://e4aa3c9680ac.ngrok.io") // need to change
+            .baseUrl("http://e4aa3c9680ac.ngrok.io") // need to change
             .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(okHttpClient)
             .build()
 
         //creating our api
@@ -167,6 +181,8 @@ class ImageActivity : AppCompatActivity() {
                     val fileContents = response.body()!!.img
                     val newBitmap = bitmapConverter.StringToBitmap(fileContents)
                     ivResult.setImageBitmap(newBitmap)
+                    curBitmap = newBitmap
+                    curFile = saveTempFile(curBitmap!!)
 
 
                 } else {
