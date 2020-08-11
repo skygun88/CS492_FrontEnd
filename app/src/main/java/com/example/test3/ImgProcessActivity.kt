@@ -12,10 +12,8 @@ import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.FileProvider
 import kotlinx.android.synthetic.main.activity_img_process.*
-import kotlinx.android.synthetic.main.activity_main.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -23,24 +21,21 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
+var curBitmap: Bitmap? = null
+var curFile: String? = null
 
 class ImgProcessActivity : AppCompatActivity() {
-    lateinit var curPhotoPath : String
-    var curBitmap: Bitmap? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_img_process)
 
         if(intent.hasExtra("requestcode")){
-
             val intentIntVal = intent.getIntExtra("requestcode", 1)
             Log.d("intent_test", "hello -> $intentIntVal")
             when (intentIntVal){
                 REQUEST_IMAGE_CAPTURE -> takeCapture()
                 REQUEST_IMAGE_GALLERY -> getFromGallery()
             }
-
         }
         buttonCw.setOnClickListener {
             curBitmap = rotate(curBitmap!!, 90)
@@ -53,12 +48,14 @@ class ImgProcessActivity : AppCompatActivity() {
         }
 
         buttonOk.setOnClickListener {
-            val tempFileName = saveTempFile(curBitmap!!)
-            val intent = Intent(this, ImageActivity::class.java)
-            intent.putExtra("tempFile", tempFileName)
+            curFile = saveTempFile(curBitmap!!)
+            val intent = Intent(this, TemplateActivity::class.java)
             startActivity(intent)
-            finish()
+            //finish()
         }
+    }
+    override fun onBackPressed() {
+        finish()
     }
 
     private fun saveTempFile(bitmap: Bitmap): String {
@@ -92,13 +89,9 @@ class ImgProcessActivity : AppCompatActivity() {
                         "com.example.test3.fileprovider",
                         it
                     )
-
                     takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
                     startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE)
-
                 }
-
-
             }
         }
     }
@@ -107,7 +100,7 @@ class ImgProcessActivity : AppCompatActivity() {
         val timestamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val storageDir : File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return File.createTempFile("JPEG_${timestamp}_", ".jpg", storageDir)
-            .apply { curPhotoPath = absolutePath}
+            .apply { curFile = absolutePath}
     }
 
 
@@ -115,7 +108,7 @@ class ImgProcessActivity : AppCompatActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         /* 1. Get image by camera */
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            val file = File(curPhotoPath)
+            val file = File(curFile)
 
             if (Build.VERSION.SDK_INT < 28) {
                 var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
@@ -154,8 +147,6 @@ class ImgProcessActivity : AppCompatActivity() {
             }
         }
         else {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
             finish()
         }
     }

@@ -1,17 +1,26 @@
 <resources>
-    <string name="app_name">test3</string>
+    <string name="app_name">Proof Pic</string>
     <string name="image_description">The fragment to show image from album or camera</string>
     <string name="gallery">gallery</string>
     <string name="camera">camera</string>
     <string name="save">save</string>
+    <string name="share">share</string>
     <string name="reset">reset</string>
     <string name="title_activity_image_processing">ImageProcessing</string>
     <string name="process_name">Crop and Rotation</string>
     <string name="clock_wise">90</string>
     <string name="counter_clock_wise">-90</string>
     <string name="ok">ok</string>
-    <string name="main">main</string>
-    <string name="http">http</string>
+    <string name="main">Main</string>
+    <string name="request">Request</string>
+    <string name="selected">Selected image</string>
+    <string name="template_activity">Select the template</string>
+    <string name="title01">template1</string>
+    <string name="title02">template2</string>
+    <string name="title03">template3</string>
+    <string name="title04">template4</string>
+    <string name="title05">template5</string>
+    <string name="title06">template6</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

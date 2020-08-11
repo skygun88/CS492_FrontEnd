@@ -8,10 +8,8 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="200dp"
-        android:layout_marginBottom="200dp"
-        android:gravity="center"
+        android:layout_height="688dp"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -19,71 +17,24 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivResult"
+            android:id="@+id/ivRequest"
             android:layout_width="match_parent"
-            android:layout_height="500dp"
+            android:layout_height="650dp"
             android:contentDescription="@string/image_description"
-            android:scaleType="centerCrop"
             android:src="@drawable/test_image" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
+            <Button
+                android:id="@+id/buttonRequest"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/buttonMain"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="211dp"
-                    android:text="@string/main"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonReset"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/buttonSave"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:text="@string/save"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonReset"
-                    app:layout_constraintStart_toEndOf="@+id/buttonMain"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Save" />
-
-                <Button
-                    android:id="@+id/buttonReset"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:text="@string/reset"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Reset" />
-
-                <Button
-                    android:id="@+id/buttonHttp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="@string/http"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/buttonSave" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
+                android:layout_height="50dp"
+                android:text="@string/request" />
         </LinearLayout>
 
     </LinearLayout>

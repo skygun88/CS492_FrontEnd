@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ImgProcessActivity">
+    tools:context=".ResultActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/ivProcess"
+            android:id="@+id/ivResult"
             android:layout_width="match_parent"
             android:layout_height="650dp"
             android:contentDescription="@string/image_description"
@@ -34,38 +34,38 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/buttonCcw"
+                    android:id="@+id/buttonMain"
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginEnd="20dp"
-                    android:text="@string/counter_clock_wise"
+                    android:text="@string/main"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonOk"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonSave"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <Button
-                    android:id="@+id/buttonOk"
+                    android:id="@+id/buttonSave"
                     style="@style/Widget.AppCompat.Button"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
-                    android:text="@string/ok"
+                    android:text="@string/save"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonCw"
-                    app:layout_constraintStart_toEndOf="@+id/buttonCcw"
+                    app:layout_constraintEnd_toStartOf="@+id/buttonShare"
+                    app:layout_constraintStart_toEndOf="@+id/buttonMain"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Save" />
 
                 <Button
-                    android:id="@+id/buttonCw"
+                    android:id="@+id/buttonShare"
                     android:layout_width="100dp"
                     android:layout_height="50dp"
                     android:layout_marginStart="20dp"
-                    android:text="@string/clock_wise"
+                    android:text="@string/share"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/buttonOk"
+                    app:layout_constraintStart_toEndOf="@+id/buttonSave"
                     app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
