@@ -13,6 +13,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
+import kotlinx.android.synthetic.main.activity_image.*
 import kotlinx.android.synthetic.main.activity_img_process.*
 import java.io.File
 import java.io.FileOutputStream
@@ -109,46 +113,81 @@ class ImgProcessActivity : AppCompatActivity() {
         /* 1. Get image by camera */
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             val file = File(curFile)
-
-            if (Build.VERSION.SDK_INT < 28) {
-                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
-                val newBitmap = resizeBitmap(bitmap)
-                ivProcess.setImageBitmap(newBitmap)
-                curBitmap = newBitmap
-                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
-            }
-            else {
-                val decode = ImageDecoder.createSource(
-                    this.contentResolver,
-                    Uri.fromFile(file)
-                )
-                var bitmap = ImageDecoder.decodeBitmap(decode)
-                val newBitmap = resizeBitmap(bitmap)
-                ivProcess.setImageBitmap(newBitmap)
-                curBitmap = newBitmap
-                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
-            }
+            launchImageCrop(Uri.fromFile(file))
+//            if (Build.VERSION.SDK_INT < 28) {
+//                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
+//                val newBitmap = resizeBitmap(bitmap)
+//                ivProcess.setImageBitmap(newBitmap)
+//                curBitmap = newBitmap
+//                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
+//            }
+//            else {
+//                val decode = ImageDecoder.createSource(
+//                    this.contentResolver,
+//                    Uri.fromFile(file)
+//                )
+//                var bitmap = ImageDecoder.decodeBitmap(decode)
+//                val newBitmap = resizeBitmap(bitmap)
+//                ivProcess.setImageBitmap(newBitmap)
+//                curBitmap = newBitmap
+//                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
+//            }
         }
 
         /* 2. Get image from gallery */
         else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK) {
-            val curImageUri: Uri? = data?.data
-            try {
-                var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, curImageUri)
-                //imageView.setImageBitmap(bitmap)
-
-                //val new_bitmap = rotate(bitmap, 90)
-                val newBitmap = resizeBitmap(bitmap)
-                ivProcess.setImageBitmap(newBitmap)
-                curBitmap = newBitmap
-                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
-            } catch (e: Exception) {
-                null
+//            val curImageUri: Uri? = data?.data
+//            try {
+//                var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, curImageUri)
+//                //imageView.setImageBitmap(bitmap)
+//
+//                //val new_bitmap = rotate(bitmap, 90)
+//                val newBitmap = resizeBitmap(bitmap)
+//                ivProcess.setImageBitmap(newBitmap)
+//                curBitmap = newBitmap
+//                Log.d("Bitmap size", "width: ${curBitmap!!.width}, height: ${curBitmap!!.height}")
+//            } catch (e: Exception) {
+//                null
+//            }
+            if (resultCode == Activity.RESULT_OK) {
+                data?.data?.let { uri ->
+                    launchImageCrop(uri)
+                }
+            }
+            else{
+                Log.e("CropTest", "Image selection error: Couldn't select that image from memory." )
             }
         }
+        else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            val result = CropImage.getActivityResult(data)
+            if (resultCode == Activity.RESULT_OK) {
+                var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, result.uri)
+                val newBitmap = resizeBitmap(bitmap)
+                curBitmap = newBitmap
+                setImage(result.uri)
+            }
+            else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                Log.e("CropTest", "Crop error: ${result.getError()}" )
+            }
+        }
+
         else {
             finish()
         }
+    }
+
+    private fun setImage(uri: Uri){
+        Glide.with(this)
+            .load(uri)
+            .into(ivProcess)
+    }
+
+    private fun launchImageCrop(uri: Uri){
+        CropImage.activity(uri)
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setAspectRatio(1000, 1000)
+            .setCropShape(CropImageView.CropShape.RECTANGLE) // default is rectangle
+            .start(this)
     }
 
     private fun rotate(bitmap: Bitmap, degree: Int) : Bitmap {
