@@ -46,7 +46,6 @@ class ImgProcessActivity : AppCompatActivity() {
             curFile = saveTempFile(curBitmap!!)
             val intent = Intent(this, TemplateActivity::class.java)
             startActivity(intent)
-            //finish()
         }
     }
     override fun onBackPressed() {
@@ -60,7 +59,6 @@ class ImgProcessActivity : AppCompatActivity() {
         val out = FileOutputStream(result)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
         return result
-
     }
 
     private fun getFromGallery() {
@@ -142,14 +140,6 @@ class ImgProcessActivity : AppCompatActivity() {
             .setCropShape(CropImageView.CropShape.RECTANGLE) // default is rectangle
             .start(this)
     }
-
-//    private fun rotate(bitmap: Bitmap, degree: Int) : Bitmap {
-//        val width = bitmap.width
-//        val height = bitmap.height
-//        val mtx = Matrix()
-//        mtx.setRotate(degree.toFloat())
-//        return Bitmap.createBitmap(bitmap, 0, 0, width, height, mtx, true)
-//    }
 
     private fun resizeBitmap(bitmap: Bitmap): Bitmap {
         val curWidth = bitmap.width

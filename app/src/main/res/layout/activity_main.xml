@@ -33,22 +33,32 @@
             <Button
                 android:id="@+id/buttonCamera"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="210dp"
+                android:layout_width="135dp"
                 android:layout_height="210dp"
                 android:layout_marginEnd="0dp"
                 android:text="@string/camera"
-                android:textSize="30sp"
+                android:textSize="24sp"
                 android:textStyle="bold"
                 tools:text="Camera" />
 
             <Button
-                android:id="@+id/buttonMain"
+                android:id="@+id/buttonGallery"
                 style="@style/Widget.AppCompat.Button.Borderless"
-                android:layout_width="210dp"
+                android:layout_width="135dp"
                 android:layout_height="210dp"
                 android:layout_marginStart="0dp"
                 android:text="@string/gallery"
-                android:textSize="30sp"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/buttonResults"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="135dp"
+                android:layout_height="210dp"
+                android:layout_marginStart="0dp"
+                android:text="@string/results"
+                android:textSize="24sp"
                 android:textStyle="bold" />
 
         </LinearLayout>

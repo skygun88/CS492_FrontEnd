@@ -18,10 +18,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".ResultsRecyclerActivity"
+            android:label="@string/results_activity"/>
+        <activity
             android:name=".ResultActivity"
-            android:label="@string/result"/>
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
-            android:theme="@style/Base.Theme.AppCompat"/>
+            android:label="@string/result" />
+        <activity
+            android:name=".ResultActivity2"
+            android:label="@string/prev_result" />
+        <activity
+            android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+            android:theme="@style/Base.Theme.AppCompat" />
         <activity
             android:name=".TemplateActivity"
             android:label="@string/template_activity" />

@@ -28,7 +28,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /* ------------------- */
-const val baseUrl = "http://d43cc272cd6c.ngrok.io"
+const val baseUrl = "http://73545bc25381.ngrok.io"
 
 class ImageActivity : AppCompatActivity() {
     /* --- Django test --- */
@@ -43,40 +43,12 @@ class ImageActivity : AppCompatActivity() {
 
         if (intent.hasExtra("index")) {
             templateIdx = intent.getIntExtra("index", 0)
-
-//            val file = File(curFile)
-//
-//            if (Build.VERSION.SDK_INT < 28) {
-//                var bitmap = MediaStore.Images.Media.getBitmap(contentResolver, Uri.fromFile(file))
-//
-//                Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-//                ivResult.setImageBitmap(bitmap)
-//                curBitmap = bitmap
-//
-//            } else {
-//                val decode = ImageDecoder.createSource(
-//                    this.contentResolver,
-//                    Uri.fromFile(file)
-//                )
-//                var bitmap = ImageDecoder.decodeBitmap(decode)
-//                Log.d("테스트", "width : ${bitmap.width}, height: ${bitmap.height}")
-//                ivResult.setImageBitmap(bitmap)
-//                curBitmap = bitmap
-//
-//            }
             ivRequest.setImageBitmap(curBitmap)
         }
 
         buttonRequest.setOnClickListener {
+            buttonRequest.isEnabled = false
             testRetrofit()
-//            if (success == true) {
-//                Toast.makeText(this, "Conversion is successfully finished", Toast.LENGTH_SHORT).show()
-//                val intent = Intent(this, ResultActivity::class.java)
-//                startActivity(intent)
-//            }
-//            else {
-//                Toast.makeText(this, "Conversion is failed, Need to try again later", Toast.LENGTH_SHORT).show()
-//            }
         }
     }
 
@@ -90,31 +62,14 @@ class ImageActivity : AppCompatActivity() {
 
     }
 
-    private fun savePhoto(bitmap: Bitmap) {
-        val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/"
-        val timestamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fileName = "${timestamp}.jpeg"
-        val folder = File(folderPath)
-        if (!folder.isDirectory) {
-            folder.mkdirs()
-        }
-
-        val out = FileOutputStream(folderPath + fileName)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-        Toast.makeText(this, "Saved the photo on gallery", Toast.LENGTH_SHORT).show()
-    }
-
     private fun testRetrofit(){
-
         //creating a file
         val file = File(curFile!!)
         val fileName = "tempFile.png"
 
-
         var requestBody : RequestBody = RequestBody.create(MediaType.parse("image/*"),file)
         var body : MultipartBody.Part = MultipartBody.Part.createFormData("uploaded_file",fileName,requestBody)
 
-        Log.d("Bodytest", "1")
         //The gson builder
         var gson : Gson =  GsonBuilder()
             .setLenient()
@@ -122,44 +77,43 @@ class ImageActivity : AppCompatActivity() {
 
         var okHttpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
-            .readTimeout(60, TimeUnit.SECONDS)
-            .writeTimeout(60, TimeUnit.SECONDS)
+            .readTimeout(90, TimeUnit.SECONDS)
+            .writeTimeout(90, TimeUnit.SECONDS)
             .build()
-        Log.d("Bodytest", "2")
+
         //creating retrofit object
         var retrofit = Retrofit.Builder()
-            //.baseUrl("http://e4aa3c9680ac.ngrok.io") // need to change
             .baseUrl(baseUrl) // need to change
             .addConverterFactory(GsonConverterFactory.create(gson))
             .client(okHttpClient)
             .build()
-        Log.d("Bodytest", "3")
-        //creating our api
 
+        //creating our api
         var server = retrofit.create(retrofitInterface::class.java)
         Log.d("Bodytest", body.toString())
-        // 파일, 사용자 아이디, 파일이름
         server.post_Porfile_Request(templateIdx, body).enqueue(object: Callback<UserData> {
             override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
                 if (response.isSuccessful) {
-                    //Log.d("레트로핏 결과2",""+ ''response.body().toString())
                     Log.d("Bodytest 2",""+ "hi")
                     val fileContents = response.body()!!.img
                     val newBitmap = bitmapConverter.StringToBitmap(fileContents)
-                    //ivRequest.setImageBitmap(newBitmap)
                     curBitmap = newBitmap
                     curFile = saveTempFile(curBitmap!!)
                     Toast.makeText(applicationContext, "Conversion is successfully finished", Toast.LENGTH_SHORT).show()
+                    buttonRequest.isEnabled = true
+
+                    /* move to next activity */
                     val intent = Intent(applicationContext, ResultActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Log.d("Bodytest 3",""+ response.body().toString())
+                    Log.d("Bodytest 3", response.body().toString())
+                    buttonRequest.isEnabled = true
                 }
             }
             override fun onFailure(call: Call<UserData>, t: Throwable) {
                 Log.d("Bodytest 4",t.message)
                 Toast.makeText(applicationContext, "Conversion is failed, Need to try again later", Toast.LENGTH_SHORT).show()
-
+                buttonRequest.isEnabled = true
             }
         })
     }

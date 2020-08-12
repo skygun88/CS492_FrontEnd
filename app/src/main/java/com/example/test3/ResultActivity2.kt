@@ -15,6 +15,11 @@ import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_result.*
+import kotlinx.android.synthetic.main.activity_result.buttonMain
+import kotlinx.android.synthetic.main.activity_result.buttonSave
+import kotlinx.android.synthetic.main.activity_result.buttonShare
+import kotlinx.android.synthetic.main.activity_result.ivResult
+import kotlinx.android.synthetic.main.activity_result2.*
 import okhttp3.*
 import retrofit2.Call
 import java.io.File
@@ -31,7 +36,7 @@ import java.util.concurrent.TimeUnit
 /* ------------------- */
 
 
-class ResultActivity : AppCompatActivity() {
+class ResultActivity2 : AppCompatActivity() {
     /* --- Django test --- */
     internal lateinit var retrofit: Retrofit
     internal lateinit var comment: Call<ResponseBody>
@@ -39,21 +44,17 @@ class ResultActivity : AppCompatActivity() {
     /* ------------------- */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_result)
+        setContentView(R.layout.activity_result2)
         ivResult.setImageBitmap(curBitmap)
-        //ivResult.setImageDrawable(getDrawable(R.drawable.sample))
-
-        /* Save the result file on internal storage */
-        curBitmap?.let {saveOnApp(it)}
 
         buttonSave.setOnClickListener {
             curBitmap?.let { saveOnGallery(it) }
         }
 
         buttonMain.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
             curBitmap = null
             curFile = null
+            val intent = Intent(this, MainActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
         }
@@ -62,42 +63,33 @@ class ResultActivity : AppCompatActivity() {
             Toast.makeText(this, "Need to implement.", Toast.LENGTH_SHORT).show()
             //ivResult.setImageURI(Uri.fromFile(File(filesDir, fileName)))
         }
+        buttonDelete.setOnClickListener {
+            Toast.makeText(this, "Image deleted", Toast.LENGTH_SHORT).show()
+            File(curFile).delete()
+            curBitmap = null
+            curFile = null
+            val intent = Intent(this, ResultsRecyclerActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+        }
     }
     override fun onBackPressed() {
         curBitmap = null
         curFile = null
-        val intent = Intent(this, MainActivity::class.java)
-        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        startActivity(intent)
+        finish()
     }
 
     private fun saveOnGallery(bitmap: Bitmap) {
         val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/Pictures/"
         val timestamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
         val fileName = "${timestamp}.jpeg"
-        val folder = File(folderPath)
-        if (!folder.isDirectory) {
-            folder.mkdirs()
+        File(folderPath).let{
+            if (!it.isDirectory) it.mkdirs()
         }
         val out = FileOutputStream(folderPath + fileName)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
         Toast.makeText(this, "Saved the photo on gallery", Toast.LENGTH_SHORT).show()
     }
-
-    private fun saveOnApp(bitmap: Bitmap) {
-        val folderPath = Environment.getExternalStorageDirectory().absolutePath + "/ProofPic/"
-        val timestamp : String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val fileName = "${timestamp}.jpeg"
-        val folder = File(folderPath)
-        if (!folder.isDirectory) {
-            folder.mkdirs()
-        }
-        val out = FileOutputStream(folderPath + fileName)
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
-    }
-
-
-
 }
 
 

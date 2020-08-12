@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         setPermission() // check initial permission
 
-        buttonMain.setOnClickListener {
+        buttonGallery.setOnClickListener {
             //getFromGallery()
             goNextIntent(REQUEST_IMAGE_GALLERY)
         }
@@ -47,7 +47,10 @@ class MainActivity : AppCompatActivity() {
             goNextIntent(REQUEST_IMAGE_CAPTURE)
         }
 
-
+        buttonResults.setOnClickListener {
+            val intent = Intent(this, ResultsRecyclerActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun goNextIntent(type: Int){

@@ -5,8 +5,12 @@
     <string name="camera">camera</string>
     <string name="save">save</string>
     <string name="share">share</string>
+    <string name="delete">delete</string>
     <string name="reset">reset</string>
     <string name="result">Result</string>
+    <string name="results">Results</string>
+    <string name="results_activity">Previous results</string>
+    <string name="prev_result">Previous result</string>
     <string name="title_activity_image_processing">ImageProcessing</string>
     <string name="process_name">Crop and Rotation</string>
     <string name="clock_wise">90</string>
