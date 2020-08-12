@@ -29,46 +29,27 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
+            <Button
+                android:id="@+id/buttonMain"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="135dp"
+                android:layout_height="80dp"
+                android:text="@string/main" />
 
-                <Button
-                    android:id="@+id/buttonMain"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="@string/main"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonSave"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+            <Button
+                android:id="@+id/buttonSave"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="135dp"
+                android:layout_height="80dp"
+                android:text="@string/save"
+                tools:text="Save" />
 
-                <Button
-                    android:id="@+id/buttonSave"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:text="@string/save"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonShare"
-                    app:layout_constraintStart_toEndOf="@+id/buttonMain"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Save" />
-
-                <Button
-                    android:id="@+id/buttonShare"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="20dp"
-                    android:text="@string/share"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/buttonSave"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/buttonShare"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="135dp"
+                android:layout_height="80dp"
+                android:text="@string/share" />
 
         </LinearLayout>
     </LinearLayout>

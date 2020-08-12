@@ -29,46 +29,12 @@
             android:gravity="center"
             android:orientation="horizontal">
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <Button
-                    android:id="@+id/buttonCcw"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginEnd="20dp"
-                    android:text="@string/counter_clock_wise"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonOk"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <Button
-                    android:id="@+id/buttonOk"
-                    style="@style/Widget.AppCompat.Button"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:text="@string/ok"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/buttonCw"
-                    app:layout_constraintStart_toEndOf="@+id/buttonCcw"
-                    app:layout_constraintTop_toTopOf="parent"
-                    tools:text="Save" />
-
-                <Button
-                    android:id="@+id/buttonCw"
-                    android:layout_width="100dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="20dp"
-                    android:text="@string/clock_wise"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toEndOf="@+id/buttonOk"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
+            <Button
+                android:id="@+id/buttonOk"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="450dp"
+                android:layout_height="80dp"
+                android:text="@string/ok" />
 
         </LinearLayout>
     </LinearLayout>

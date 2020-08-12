@@ -69,11 +69,11 @@ class ResultActivity : AppCompatActivity() {
         if (!folder.isDirectory) {
             folder.mkdirs()
         }
-
         val out = FileOutputStream(folderPath + fileName)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
         Toast.makeText(this, "Saved the photo on gallery", Toast.LENGTH_SHORT).show()
     }
+
 
 
 }
