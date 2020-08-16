@@ -25,9 +25,6 @@ import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
-var curBitmap: Bitmap? = null
-var curFile: String? = null
-
 class ImgProcessActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

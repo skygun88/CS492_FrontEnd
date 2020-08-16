@@ -28,7 +28,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 /* ------------------- */
-const val baseUrl = "http://73545bc25381.ngrok.io"
 
 class ImageActivity : AppCompatActivity() {
     /* --- Django test --- */
@@ -59,7 +58,6 @@ class ImageActivity : AppCompatActivity() {
         val out = FileOutputStream(result)
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out)
         return result
-
     }
 
     private fun testRetrofit(){

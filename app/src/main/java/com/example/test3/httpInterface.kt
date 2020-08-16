@@ -16,6 +16,15 @@ interface retrofitInterface {
     fun post_Porfile_Request(
         @Path("template") userId: Int,
         @Part imageFile : MultipartBody.Part): Call<UserData>
+}
 
+interface imgurInterface {
+    // api 를 관리해 주는 인터페이스
 
+    // 프로필 이미지 보내기
+    @Multipart
+    @POST("imgur/{template}")
+    fun post_Porfile_Request(
+        @Path("template") userId: Int,
+        @Part imageFile : MultipartBody.Part): Call<UserData>
 }

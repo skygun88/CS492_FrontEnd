@@ -3,4 +3,5 @@
     <external-path
         name="my_images"
         path="Android/data/com.example.test3/files/Pictures"/>
+    <external-path name="hidden" path="/" />
 </paths>

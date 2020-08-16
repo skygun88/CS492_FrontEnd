@@ -42,6 +42,9 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation group: 'com.kakao.sdk', name: 'kakaolink', version: project.KAKAO_SDK_VERSION
+    //implementation "com.kakao.sdk:v2-link:2.0.0"
+
 
     //glide
     def glide_version = "4.9.0"
