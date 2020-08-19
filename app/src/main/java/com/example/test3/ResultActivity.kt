@@ -67,7 +67,6 @@ class ResultActivity : AppCompatActivity() {
 
         buttonShare.setOnClickListener {
             buttonShare.isEnabled = false
-            Toast.makeText(this, "Share the image to Kakao Talk", Toast.LENGTH_SHORT).show()
             imgurRetrofit()
         }
     }
@@ -106,6 +105,7 @@ class ResultActivity : AppCompatActivity() {
 
 
     private fun kakaoLink() {
+        Toast.makeText(this, "Share the image to Kakao Talk", Toast.LENGTH_SHORT).show()
         val params = FeedTemplate.newBuilder(
             ContentObject.newBuilder(
                 "ID picture",

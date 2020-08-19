@@ -16,12 +16,9 @@ import java.security.MessageDigest
 import java.security.NoSuchAlgorithmException
 import java.util.*
 
-const val SPLASH_VIEW_TIME = 1200
 class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-//        val a= getKeyHash(this)
-//        Log.d("KeyTest", a)
         Handler().postDelayed({ //delay를 위한 handler
             startActivity(Intent(this, MainActivity::class.java))
             finish()
@@ -30,18 +27,3 @@ class SplashActivity : AppCompatActivity() {
 
 
 }
-
-//public fun getKeyHash(context: Context): String {
-//    var packageInfo: PackageInfo = Utility.getPackageInfo(context, PackageManager.GET_SIGNATURES)
-//    for (signature in packageInfo.signatures) {
-//        try {
-//            var md : MessageDigest = MessageDigest.getInstance("SHA")
-//            md.update(signature.toByteArray())
-//
-//            return encodeToString(md.digest(), NO_WRAP)
-//        } catch (e: NoSuchAlgorithmException) {
-//            Log.w("TAG", "디버그 keyHash" + signature, e)
-//        }
-//    }
-//    return ""
-//}

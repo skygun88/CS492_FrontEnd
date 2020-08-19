@@ -18,8 +18,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
+            android:name=".LoadingActivity"
+            android:label="@string/loadingActivity"/>
+        <activity
             android:name=".ResultsRecyclerActivity"
-            android:label="@string/results_activity"/>
+            android:label="@string/results_activity" />
         <activity
             android:name=".ResultActivity"
             android:label="@string/result" />
@@ -28,11 +31,13 @@
             android:label="@string/prev_result">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data android:scheme="@string/kakao_scheme"
-                    android:host="@string/kakaolink_host" />
+                <data
+                    android:host="@string/kakaolink_host"
+                    android:scheme="@string/kakao_scheme" />
             </intent-filter>
         </activity>
         <activity

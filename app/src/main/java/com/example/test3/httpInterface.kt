@@ -12,7 +12,7 @@ interface retrofitInterface {
 
     // 프로필 이미지 보내기
     @Multipart
-    @POST("imgtest/{template}")
+    @POST("process/{template}")
     fun post_Porfile_Request(
         @Path("template") userId: Int,
         @Part imageFile : MultipartBody.Part): Call<UserData>

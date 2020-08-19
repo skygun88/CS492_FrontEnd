@@ -96,27 +96,36 @@ class ImgProcessActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         /* 1. Get image by camera */
+        Log.d(TAG, "0")
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            Log.d(TAG, "1")
             val file = File(curFile)
             launchImageCrop(Uri.fromFile(file))
         }
         /* 2. Get image from gallery */
         else if (requestCode == REQUEST_IMAGE_GALLERY && resultCode == Activity.RESULT_OK) {
+            Log.d(TAG, "2")
             data?.data?.let { uri ->
                 launchImageCrop(uri)
             }
         }
         /* 3. Crop the image */
         else if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE){
+            Log.d(TAG, "3")
             val result = CropImage.getActivityResult(data)
             if (resultCode == Activity.RESULT_OK) {
                 var bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, result.uri)
-                val newBitmap = resizeBitmap(bitmap)
-                curBitmap = newBitmap
+//                val newBitmap = resizeBitmap(bitmap)
+                curBitmap = bitmap
                 setImage(result.uri)
             }
             else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Log.e("CropTest", "Crop error: ${result.getError()}" )
+                Log.d(TAG, "Crop error: ${result.getError()}" )
+                finish()
+            }
+            else {
+                Log.d(TAG, "Back Pressed")
+                finish()
             }
         }
         else {

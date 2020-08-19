@@ -2,56 +2,47 @@ package com.example.test3
 
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
-import android.provider.MediaStore
+import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import com.bumptech.glide.Glide
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import kotlinx.android.synthetic.main.activity_image.*
-import okhttp3.*
+import kotlinx.android.synthetic.main.activity_loading.*
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.OkHttpClient
+import okhttp3.RequestBody
 import retrofit2.Call
-import java.io.File
-import java.io.FileOutputStream
-import java.text.SimpleDateFormat
-import java.util.*
-/* --- Django test --- */
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
+import java.io.FileOutputStream
 import java.util.concurrent.TimeUnit
 
-/* ------------------- */
-
-class ImageActivity : AppCompatActivity() {
-    /* --- Django test --- */
-//    internal lateinit var retrofit: Retrofit
-//    internal lateinit var comment: Call<ResponseBody>
-//    internal lateinit var result:String
+class LoadingActivity : AppCompatActivity() {
     var templateIdx : Int = 0
-    /* ------------------- */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_image)
+        setContentView(R.layout.activity_loading)
 
+
+        Glide.with(this).load(R.raw.loading3).into(ivLoading)
         if (intent.hasExtra("index")) {
             templateIdx = intent.getIntExtra("index", 0)
-            ivRequest.setImageBitmap(curBitmap)
         }
 
-        buttonRequest.setOnClickListener {
-//            buttonRequest.isEnabled = false
-//            testRetrofit()
-            val intent = Intent(this, LoadingActivity::class.java)
-            intent.putExtra("index", templateIdx)
-            startActivity(intent)
-        }
+        Handler().postDelayed({ //delay를 위한 handler
+            testRetrofit()
+        }, SPLASH_VIEW_TIME.toLong())
+
     }
 
     private fun saveTempFile(bitmap: Bitmap): String {
@@ -91,34 +82,32 @@ class ImageActivity : AppCompatActivity() {
 
         //creating our api
         var server = retrofit.create(retrofitInterface::class.java)
-        Log.d("Bodytest", body.toString())
+        Log.d(TAG, body.toString())
         server.post_Porfile_Request(templateIdx, body).enqueue(object: Callback<UserData> {
             override fun onResponse(call: Call<UserData>, response: Response<UserData>) {
                 if (response.isSuccessful) {
-                    Log.d("Bodytest 2",""+ "hi")
+                    Log.d(TAG,""+ "server response the data")
                     val fileContents = response.body()!!.img
                     val newBitmap = bitmapConverter.StringToBitmap(fileContents)
                     curBitmap = newBitmap
                     curFile = saveTempFile(curBitmap!!)
                     Toast.makeText(applicationContext, "Conversion is successfully finished", Toast.LENGTH_SHORT).show()
-                    buttonRequest.isEnabled = true
 
                     /* move to next activity */
                     val intent = Intent(applicationContext, ResultActivity::class.java)
                     startActivity(intent)
+                    finish()
                 } else {
-                    Log.d("Bodytest 3", response.body().toString())
-                    buttonRequest.isEnabled = true
+                    Log.d(TAG, response.body().toString())
+                    Toast.makeText(applicationContext, "Conversion is failed, Need to try again later", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
             }
             override fun onFailure(call: Call<UserData>, t: Throwable) {
-                Log.d("Bodytest 4",t.message)
-                Toast.makeText(applicationContext, "Conversion is failed, Need to try again later", Toast.LENGTH_SHORT).show()
-                buttonRequest.isEnabled = true
+                Log.d(TAG,t.message)
+                Toast.makeText(applicationContext, "Failed to connect the server, Need to try again later", Toast.LENGTH_SHORT).show()
+                finish()
             }
         })
     }
-
 }
-
-

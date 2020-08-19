@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Proof Pic</string>
-    <string name="image_description">The fragment to show image from album or camera</string>
+    <string name="image_description">The imageView to show image from album or camera</string>
+    <string name="loading_description">The imageView to show loading image</string>
     <string name="gallery">gallery</string>
     <string name="camera">camera</string>
     <string name="save">save</string>
@@ -20,12 +21,17 @@
     <string name="request">Request</string>
     <string name="selected">Selected image</string>
     <string name="template_activity">Select the template</string>
-    <string name="title01">template1</string>
-    <string name="title02">template2</string>
-    <string name="title03">template3</string>
-    <string name="title04">template4</string>
-    <string name="title05">template5</string>
-    <string name="title06">template6</string>
+    <string name="title01">Man template1</string>
+    <string name="title02">Man template2</string>
+    <string name="title03">Man template3</string>
+    <string name="title04">Man template4</string>
+    <string name="title05">Man template5</string>
+    <string name="title06">Woman template1</string>
+    <string name="title07">Woman template2</string>
+    <string name="title08">Woman template3</string>
+    <string name="title09">Woman template4</string>
+    <string name="title10">Woman template5</string>
+    <string name="loadingActivity">Now Processing..</string>
     <!--
     This string is used for square devices and overridden by hello_world in
     values-round/strings.xml for round devices.

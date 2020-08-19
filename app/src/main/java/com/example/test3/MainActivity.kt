@@ -14,9 +14,11 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Base64.encodeToString
 import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
+import com.bumptech.glide.Glide
 import com.gun0912.tedpermission.PermissionListener
 import com.gun0912.tedpermission.TedPermission
 import kotlinx.android.synthetic.main.activity_main.*
@@ -31,7 +33,7 @@ import java.util.*
 
 const val REQUEST_IMAGE_CAPTURE = 1
 const val REQUEST_IMAGE_GALLERY = 2
-const val REQUEST_IMG_SEND = 3
+const val SPLASH_VIEW_TIME = 1200
 const val TAG = "DebugTest"
 const val baseUrl = "http://192.249.19.248:2280"
 var curBitmap: Bitmap? = null
@@ -44,6 +46,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setPermission() // check initial permission
+
+//        Glide.with(this).load(R.raw.loading).into(imageView)
+
 
         buttonGallery.setOnClickListener {
             goNextIntent(REQUEST_IMAGE_GALLERY)
